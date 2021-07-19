@@ -45,10 +45,17 @@ public class Board {
     return true;
   }
 
-  public boolean play(Player player, Move move){
+  public boolean play(Player player, Move move) throws InvalidMoveException{
     int i = move.getI();
     int j = move.getJ();
 
+    if( i <  0 || j < 0 || i >= matrix.length || j >= matrix.length){
+      throw new InvalidMoveException("Intervalo da jogada invalido");
+    }
+
+    if (matrix[i][j] != ' '){
+      throw new InvalidMoveException("Essa jogada ja foi realizada");
+    }
     matrix[i][j] = player.getSymbol();
 
     return checkCols(player) || checkRows(player) || checkDiagonal1(player) || checkDiagonal2(player);

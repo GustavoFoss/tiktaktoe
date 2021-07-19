@@ -14,15 +14,15 @@ public class Player {
   }
 
 
-  private Move inputMove(){
+  private Move inputMove() throws InvalidMoveException {
     String moveStr = UI.readInput("Jogador " + name + " =>");
     Move m = new Move(moveStr);
     return m;
   }
 
-  public void play(){
+  public boolean play() throws InvalidMoveException {
     Move move = inputMove();
-    board.play(this , move);
+    return board.play(this , move);
   }
 
   public String getName() {
