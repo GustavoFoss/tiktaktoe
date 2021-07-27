@@ -2,14 +2,21 @@ package core;
 
 import foss.gustavo.tictactoe.Constants;
 import foss.gustavo.tictactoe.UI;
+import tictactoe.score.FileScoreManager;
+import tictactoe.score.ScoreManager;
+
+import java.io.IOException;
 
 public class Game {
 
   private Board board = new Board();
   private Player[] players = new Player[Constants.SYMBOL_PLAYERS.length];
   private int currentPlayerIndex = -1;
+  private ScoreManager scoreManager;
 
-  public void play() throws InvalidMoveException {
+  public void play() throws InvalidMoveException, IOException {
+    scoreManager = createScoreManager();
+
     UI.printGameTitle();
 
     for (int i = 0 ; i < players.length ; i++){
@@ -53,6 +60,8 @@ public class Game {
 
     else {
       UI.printText("O jogador " + winner.getName() + " VENCEU O JOGO!!!");
+
+      scoreManager.saveScore(winner);
     }
     System.out.println();
     board.print();
@@ -64,6 +73,12 @@ public class Game {
     String name = UI.readInput("Jogador " + (index + 1) +" =>");
     char symbol = Constants.SYMBOL_PLAYERS[index];
     Player player = new Player(name , board , symbol);
+
+    Integer score = scoreManager.getScore(player);
+
+    if (score != null) {
+      UI.printText("O jogador "+player.getName()+ " ja possui "+score+" vitorias!!");
+    }
 
     UI.printText("O Jogador " + name + " vai usar o símbolo " + symbol);
 
@@ -78,5 +93,9 @@ public class Game {
     return players[currentPlayerIndex];**/
     currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
     return players[currentPlayerIndex];
+  }
+
+  private ScoreManager createScoreManager() throws IOException {
+    return new FileScoreManager();
   }
 }
