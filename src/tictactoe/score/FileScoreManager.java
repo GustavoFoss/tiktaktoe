@@ -30,7 +30,7 @@ public class FileScoreManager implements ScoreManager{
       String line;
 
       while((line = reader.readLine()) != null){
-        String[] tokens = line.split("\\|,");
+        String[] tokens = line.split("\\|");
 
         scoreMap.put(tokens[0],Integer.parseInt(tokens[1]));
       }
